@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Art Made of Math</title>
+<meta name="description" content="Fifteen animations computed live in your browser from equations: fractals, chaos, four-dimensional shapes, colliding galaxies and a black hole. No footage, no AI imagery.">
+<meta property="og:title" content="Art Made of Math">
+<meta property="og:description" content="Fifteen animations computed live in your browser from equations. No footage, no AI imagery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231e2a26'/%3E%3Ctext x='16' y='23' font-family='serif' font-style='italic' font-size='20' text-anchor='middle' fill='%23efd27a'%3E%E2%88%AB%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M6 5h2v14H6zM19 5v14L9 12z" fill="currentColor"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM5 5v14l10-7z" fill="currentColor"/></symbol>
+  <symbol id="i-restart" viewBox="0 0 24 24"><path d="M12 5a7 7 0 1 1-6.6 4.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 4v6h6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 9v6l5-3z" fill="currentColor"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-full" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<header class="top">
+  <a class="mark" href="#">Art Made of Math</a>
+  <nav aria-label="Page sections">
+    <a href="#notes">Scenes</a>
+    <a href="#how">How it works</a>
+    <a href="#not-ai">Not AI art</a>
+    <a href="#made">How it was made</a>
+  </nav>
+</header>
+
+<main>
+  <section class="player" aria-label="Live animation">
+    <div class="stage" id="stage">
+      <canvas id="c" aria-label="Live mathematical animation"></canvas>
+      <div class="overlay" id="overlay">
+        <div class="caption" id="caption" aria-live="polite">
+          <span class="cap-num"></span>
+          <p class="cap-title"></p>
+          <p class="cap-hook"></p>
+        </div>
+      </div>
+      <p class="fail" id="fail" role="alert"></p>
+    </div>
+    <div class="controls" role="toolbar" aria-label="Player controls">
+      <div class="group">
+        <button id="prev" title="Previous scene (left arrow)"><svg><use href="#i-prev"/></svg><span class="lbl sr">Previous</span></button>
+        <button id="play" title="Play or pause (space)"><svg><use href="#i-pause"/></svg><span class="lbl">Pause</span></button>
+        <button id="next" title="Next scene (right arrow)"><svg><use href="#i-next"/></svg><span class="lbl sr">Next</span></button>
+        <button id="restart" title="Restart this scene (R)"><svg><use href="#i-restart"/></svg><span class="lbl sr">Restart</span></button>
+      </div>
+      <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+      <div class="group">
+        <button id="film" aria-pressed="false" title="Play all fifteen scenes in order"><svg><use href="#i-film"/></svg><span class="lbl">Play the film</span></button>
+        <button id="sound" aria-pressed="false" title="The score is synthesized live, like the pictures"><svg><use href="#i-sound"/></svg><span class="lbl">Sound off</span></button>
+        <label class="quality"><span class="sr">Picture quality</span>
+          <select id="quality">
+            <option value="auto">Auto quality</option>
+            <option value="high">Sharp</option>
+            <option value="low">Fast</option>
+          </select>
+        </label>
+        <button id="full" title="Full screen (F)"><svg><use href="#i-full"/></svg><span class="lbl sr">Full screen</span></button>
+      </div>
+    </div>
+  </section>
+
+  <p class="intro">Fifteen pieces of mathematics, computed live by your graphics card. Nothing here was filmed, drawn or made by an AI image model. Every pixel is the answer to an equation, worked out again thirty or more times a second, right now, on your device.</p>
+
+  <section class="explain" id="notes" aria-label="About this scene">
+    <nav class="contents" aria-label="Scenes">
+      <h2>Contents</h2>
+      <p class="vol">Volume I</p>
+      <ol id="toc1"></ol>
+      <p class="vol">Volume II</p>
+      <ol id="toc2" start="7"></ol>
+    </nav>
+    <article class="notes">
+      <p class="where"><span id="n-vol"></span>, scene <span id="n-num"></span></p>
+      <h2 id="n-title"></h2>
+      <p class="lede" id="n-lede"></p>
+      <h3>What you’re seeing</h3>
+      <p id="n-see"></p>
+      <h3>The math</h3>
+      <div class="formula" id="n-formula"></div>
+      <p id="n-math"></p>
+      <h3>How the code draws it</h3>
+      <p id="n-code"></p>
+      <dl class="facts" id="n-facts"></dl>
+    </article>
+  </section>
+
+  <section class="essay" id="how">
+    <h2>How a computer paints with math</h2>
+    <p>A screen is a grid of tiny colored dots. Each dot’s color is three numbers: how much red, green and blue. Making a picture comes down to one question, asked for every dot: what color should this be?</p>
+    <p>A painter answers that question with a brush and a camera answers it with light. Here a rule written in code answers it. A simple rule such as “darker the further from the center” gives a spotlight. The rules on this page come from fractal geometry, chaos theory, chemistry, Einstein’s gravity and the geometry of four dimensions. The artist chooses the rule; the rule makes the picture.</p>
+    <p>Motion comes from time. Every rule also takes the moment as an input, so the same rule gives a slightly different picture a thirtieth of a second later. Some scenes are formulas that can be worked out for any moment directly. Others are simulations: a small virtual world of chemicals, pendulums or stars, nudged forward one tiny step at a time.</p>
+    <p>All of it runs on your graphics card, the part of a computer built to do the same small calculation for millions of pixels at once. That is why a deep fractal zoom, millions of pendulums and a black hole bending light can all play live in a web page.</p>
+  </section>
+
+  <section class="essay" id="not-ai">
+    <h2>This is not AI image generation</h2>
+    <p>AI image and video generators learn from millions of existing pictures and produce new ones that statistically resemble them. Procedural art works the other way round: there is no training, no dataset and no prompt. Every rule is written out, and every pixel can be traced back to a line of math you can read.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col"></th><th scope="col">This page</th><th scope="col">AI image generators</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Made from</th><td>Equations and rules a person can read</td><td>Patterns learned from millions of existing images</td></tr>
+          <tr><th scope="row">Training data</th><td>None</td><td>Large collections of pictures</td></tr>
+          <tr><th scope="row">Can you explain each pixel?</th><td>Yes, by following the formula</td><td>No; the reasons are spread across billions of learned numbers</td></tr>
+          <tr><th scope="row">Same result every time?</th><td>Yes for the formula scenes; the chaotic ones vary slightly between graphics cards, which is chaos at work</td><td>Usually not</td></tr>
+          <tr><th scope="row">Size of the source</th><td>A few hundred kilobytes of text</td><td>Model files of many gigabytes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="essay" id="lineage">
+    <h2>An old idea, seen fresh</h2>
+    <p>Artists have made pictures from rules and computers for more than sixty years. <a href="https://en.wikipedia.org/wiki/Georg_Nees">Georg Nees</a> exhibited computer drawings in Stuttgart in February 1965, one of the first shows of its kind. <a href="https://www.bostonglobe.com/2023/12/15/metro/vera-molnar-pioneer-computer-art-dies-99">Vera Molnár</a> was making art from simple rules on paper before she began working with computers in 1968. The <a href="https://en.wikipedia.org/wiki/Demoscene">demoscene</a>, a worldwide community that makes real-time art from compact code, is now recognized as cultural heritage in several countries. <a href="https://en.wikipedia.org/wiki/Shadertoy">Shadertoy</a>, launched in 2013, is a home for images written entirely as math that runs in the browser, like the ones on this page.</p>
+  </section>
+
+  <section class="essay" id="made">
+    <h2>How it was made</h2>
+    <p>The code behind these animations was written by Claude, an AI assistant, working from a brief to show the limits of code-generated imagery. That is different from AI image generation: no AI drew a single frame. The pictures come from your own computer running readable instructions, the same kind a human programmer writes.</p>
+    <p>Everything is open to inspection. Each scene is one short JavaScript file with its shader inside, and every color, camera move and musical note can be traced to a specific line. The score is synthesized live too: turn on sound and every note is calculated in your browser.</p>
+    <p>The same scenes were first written in C and rendered into two films on an ordinary two-core computer. This page runs them in real time instead.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Every frame and every note computed from mathematics. Code written with Claude; no image or video AI. Keyboard: space to pause, arrow keys to change scene, F for full screen.</p>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
